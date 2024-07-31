@@ -1,24 +1,44 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Sidebar from './components/Sidebar';
+import Home from './components/Home';
+import Community from './components/Community';
+import Profile from './components/Profile';
+import TopBar from './components/TopBar';
+import SignInSignUpForm from './components/SignInSignUpForm';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import CourseDetails from './components/CourseDetail';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <MainContent />
+      </div>
+    </Router>
+  );
+}
+
+function MainContent() {
+  const location = useLocation();
+  const hideSidebarRoutes = ['/signin'];
+
+  const isSidebarVisible = !hideSidebarRoutes.includes(location.pathname);
+
+  return (
+    <>
+      {isSidebarVisible && <Sidebar />}
+      <div className="content">
+        {isSidebarVisible && <TopBar />}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/course/:courseId" element={<CourseDetails />} />
+          <Route path="/signin" element={<SignInSignUpForm />} />
+        </Routes>
+      </div>
+    </>
   );
 }
 
